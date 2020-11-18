@@ -1,28 +1,78 @@
 .input {
+  justify-content: stretch;
   display: grid;
-  grid-template-areas: "whl numl denl" "whi numi deni";
-}
-.input__whole_label {
-  grid-area: whl;
-}
-.input__numerator_label {
-  grid-area: numl;
-}
-.input__denominator_label {
-  grid-area: denl;
-}
-.input__whole_input {
-  grid-area: whi;
-}
-.input__numerator_input {
-  grid-area: numi;
-}
-.input__denominator_input {
-  grid-area: deni;
-}
+  justify-items: center;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas: "whl numl denl" "whi numi deni"; }
+  @media screen and (max-width: 768px) {
+    .input {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas: "whl whl" "whi whi" "numl denl" "numi deni"; } }
+  .input__whole_label {
+    grid-area: whl; }
+  .input__numerator_label {
+    grid-area: numl; }
+  .input__denominator_label {
+    grid-area: denl; }
+  .input__whole_input {
+    grid-area: whi;
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center; }
+    @media screen and (max-width: 768px) {
+      .input__whole_input {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center; } }
+  .input__numerator_input {
+    grid-area: numi;
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column; }
+  .input__denominator_input {
+    grid-area: deni;
+    font-size: 1.5rem;
+    display: flex;
+    flex-direction: column; }
+
+.output {
+  font-size: 3rem;
+  text-align: center; }
+  .output--alert {
+    background-color: black;
+    color: yellow;
+    font-size: 2.25rem;
+    text-align: center; }
 
 .words {
   font-size: 1.5rem;
-}
+  font-family: sans-serif;
+  justify-content: center;
+  text-align: center; }
+
+.button {
+  display: block;
+  font-size: 1.5rem;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  width: 10rem;
+  border-radius: 1rem; }
+  .button--inc {
+    background-color: lightblue; }
+  .button--dec {
+    background-color: pink; }
+
+.input_box {
+  font-size: 2.5rem;
+  height: 3rem;
+  width: 8rem;
+  text-align: center;
+  flex-basis: 65%; }
+
+.slider {
+  font-size: 3rem;
+  height: 3rem; }
+
 
 /*# sourceMappingURL=/index.css.map */

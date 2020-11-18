@@ -140,6 +140,9 @@ module.exports = {
   "devDependencies": {
     "marked": "^1.2.4",
     "sass": "^1.29.0"
+  },
+  "dependencies": {
+    "node-sass": "^5.0.0"
   }
 };
 },{}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {

@@ -1,8 +1,22 @@
+$input-size: 1.5rem;
+
 .input {
+  justify-content: stretch;
   display: grid;
+  justify-items: center;
+  grid-template-columns: 1fr 1fr 1fr;
   grid-template-areas: 
     "whl numl denl"
     "whi numi deni";
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 
+      "whl whl"
+      "whi whi"
+      "numl denl"
+      "numi deni";
+  }
 
   &__whole_label {
     grid-area: whl;
@@ -18,17 +32,77 @@
 
   &__whole_input {
     grid-area: whi;
+    font-size: $input-size;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @media screen and (max-width: 768px) {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
   }
 
   &__numerator_input {
     grid-area: numi;
+    font-size: $input-size;
+    display: flex;
+    flex-direction: column;
   }
 
   &__denominator_input {
     grid-area: deni;
+    font-size: $input-size;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.output {
+  font-size: $input-size * 2;
+  text-align: center;
+
+  &--alert {
+    background-color: black;
+    color: yellow;
+    font-size: $input-size * 1.5;
+    text-align: center;
   }
 }
 
 .words {
   font-size: 1.5rem;
+  font-family: sans-serif;
+  justify-content: center;
+  text-align: center;
+}
+
+.button {
+  display: block;
+  font-size: $input-size;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  width: 10rem;
+  border-radius: 1rem;
+
+  &--inc {
+    background-color: lightblue;
+  }
+
+  &--dec {
+    background-color: pink;
+  }
+}
+.input_box {
+  font-size: 2.5rem;
+  height: 3rem;
+  width: 8rem;
+  text-align: center;
+  flex-basis: 65%;
+}
+
+.slider {
+  font-size: 3rem;
+  height: 3rem;
 }

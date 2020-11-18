@@ -3,36 +3,79 @@ let denominator = 2;
 let whole = 0;
 let oldDenominator = 2;
 
-let nSlider = document.getElementById('nInput');
-let dSlider = document.getElementById('dInput');
+let nInput = document.getElementById('nInput');
+let dInput = document.getElementById('dInput');
 let wInput = document.getElementById('wInput');
+
+let incNum = document.getElementById('incNum');
+let decNum = document.getElementById('decNum');
+
+let incDen = document.getElementById('incDen');
+let decDen = document.getElementById('decDen');
+
+let incWh = document.getElementById('incWh');
+let decWh = document.getElementById('decWh');
 
 let nOutput = document.getElementById('nOutput');
 let dOutput = document.getElementById('dOutput');
 let mainOutput = document.getElementById('mainOutput');
+let alertOutput = document.getElementById('alerts');
 
-nSlider.addEventListener('input', nUpdate);
-dSlider.addEventListener('input', dUpdate);
+nInput.addEventListener('input', nUpdate);
+dInput.addEventListener('input', dUpdate);
 wInput.addEventListener('input', wUpdate);
 
-function wUpdate() {
-  whole = this.value;
-  refreshMain();
-}
+incNum.addEventListener('click', (event) => {
+  event.preventDefault();
+  refreshNum(numerator + 1);
+});
 
-function dUpdate() {
-  denominator = Math.pow(2, this.value)
+decNum.addEventListener('click', (event) => {
+  event.preventDefault();
+  refreshNum(numerator - 1);
+});
+
+incDen.addEventListener('click', (event) => {
+  event.preventDefault();
+  let target = document.getElementById('dInput');
+  target.value = parseInt(target.value) + 1;
+  refreshDen(target.value);
+});
+
+decDen.addEventListener('click', (event) => {
+  event.preventDefault();
+  if (numerator % 2 != 0) {
+    alertOutput.innerHTML = 'Warning! Precision lost.';
+    setTimeout(() => alertOutput.innerHTML = '', 2000);
+  }
+  let target = document.getElementById('dInput');
+  target.value = parseInt(target.value) - 1;
+  refreshDen(target.value);
+});
+
+decWh.addEventListener('click', (event) => {
+  event.preventDefault();
+  refreshWh(whole - 1);
+});
+
+incWh.addEventListener('click', (event) => {
+  event.preventDefault();
+  refreshWh(whole + 1);
+});
+
+function refreshDen(val) {
+  if (val < 1)
+    val = 1;
+  if (val > 6)
+    val = 6;
+  denominator = Math.pow(2, val);
+  console.log(`Updating denominator to ${denominator}`);
   dOutput.innerHTML = denominator;
   nInput.setAttribute("max", denominator);
 
   if (denominator > oldDenominator) {
-    // numerator *= 2;
-    // nInput.setAttribute("value", numerator);
     refreshNum(numerator * 2);
-  }
-  else if (denominator < oldDenominator){
-    // numerator /= 2;
-    // nInput.setAttribute("value", numerator);
+  } else if (denominator < oldDenominator) {
     refreshNum(Math.floor(numerator / 2));
   }
 
@@ -40,27 +83,66 @@ function dUpdate() {
   refreshMain();
 }
 
+function wUpdate() {
+  whole = this.value;
+  refreshMain();
+}
+
+function dUpdate() {
+  refreshDen(this.value);
+
+}
+
 function nUpdate() {
   refreshNum(this.value);
 }
 
 function refreshNum(val) {
+  if (val < 0)
+    val = 0;
+  console.log(`Updating numerator to ${val}`);
   numerator = val;
   nInput.value = numerator;
   nOutput.innerHTML = numerator;
   refreshMain();
 }
 
-function refreshMain() {
-  let s = '';
-  
-  if (whole != 0)
-    s += `${whole}`;
-  
-    if (numerator != 0)
-    s += "-" + simplify(`${numerator}/${denominator}`) + '"';
+function refreshWh(val) {
+  if (val < 0) {
+    val = 0;
+  }
+  console.log(`Updating whole to ${val}`)
+  whole = val;
+  wInput.value = whole;
+  refreshMain();
+}
 
-  mainOutput.innerHTML = s;
+function refreshMain() {
+  if (numerator == denominator) {
+    numerator = 0;
+    refreshWh(whole + 1);
+    refreshNum(numerator);
+  }
+
+  let s = '';
+
+  if (whole != 0) {
+    s = `${whole}`;
+  }
+  
+  if (whole != 0 && numerator != 0) {
+    s += "-";
+  }  
+  
+  if (numerator != 0) {
+    s += simplify(`${numerator}/${denominator}`);
+  }
+
+  if (whole == 0 && numerator == 0) {
+    s = '0';
+  }
+
+  mainOutput.innerHTML = s + '"';;
 }
 
 
@@ -81,4 +163,4 @@ function simplify(str) {
   result = numOne.toString() + '/' + numTwo.toString() 
   } 
   return result 
-} 
+}

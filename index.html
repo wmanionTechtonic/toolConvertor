@@ -4,24 +4,34 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="index.scss" rel="stylesheet" />
-  <title>Document</title>
+  <title>Tool Convertor</title>
 </head>
 <body class='words'>
   <form class='input'>
     <label class="input__whole_label" for='wInput'>Whole inches:</label>
-    <input class='input__whole_input' type='number' id='wInput'>
+    <div class='input__whole_input'>
+      <input class='input_box' type='number' id='wInput' value='0'>
+      <button class='button button--inc' id='incWh'>Increment Inches</button>
+      <button class='button button--dec' id='decWh'>Decrement Inches</button>
+    </div>
 
     <label class="input__numerator_label" for='nInput'>Numerator: <span id='nOutput'>0</span></label>
-    <input class="input__numerator_input" type='range' id='nInput' min='0' max='2' value='0'>
+    <div class='input__numerator_input'>
+      <input class="slider" type='range' id='nInput' min='0' max='2' value='0'>
+      <button class='button button--inc' id='incNum'>Increment Numerator</button>
+      <button class='button button--dec' id='decNum'>Decrement Numerator</button>
+    </div>
     
-    
-    <label class="input__denominator_label" for='dInput'>Denominator: <span id="dOutput">2</span>    </label>
-    <input class="input__denominator_input" type="range" min='1' max='6' value='1' id="dInput">
-    
+    <label class="input__denominator_label" for='dInput'>Denominator: <span id="dOutput">2</span></label>
+    <div class='input__denominator_input'>
+      <input class="slider" type="range" min='1' max='6' value='1' id="dInput">
+      <button class='button button--inc' id='incDen'>Increment Denominator</button>
+      <button class='button button--dec' id='decDen'>Decrement Denominator</button>
+    </div>
   </form>
 
-
-  <p id="mainOutput"></p>
+  <div class='output--alert' id='alerts'></div>
+  <div class='output' id='mainOutput'>0"</div>
 
 </body>
 

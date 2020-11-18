@@ -122,33 +122,70 @@ var numerator = 0;
 var denominator = 2;
 var whole = 0;
 var oldDenominator = 2;
-var nSlider = document.getElementById('nInput');
-var dSlider = document.getElementById('dInput');
+var nInput = document.getElementById('nInput');
+var dInput = document.getElementById('dInput');
 var wInput = document.getElementById('wInput');
+var incNum = document.getElementById('incNum');
+var decNum = document.getElementById('decNum');
+var incDen = document.getElementById('incDen');
+var decDen = document.getElementById('decDen');
+var incWh = document.getElementById('incWh');
+var decWh = document.getElementById('decWh');
 var nOutput = document.getElementById('nOutput');
 var dOutput = document.getElementById('dOutput');
 var mainOutput = document.getElementById('mainOutput');
-nSlider.addEventListener('input', nUpdate);
-dSlider.addEventListener('input', dUpdate);
+var alertOutput = document.getElementById('alerts');
+nInput.addEventListener('input', nUpdate);
+dInput.addEventListener('input', dUpdate);
 wInput.addEventListener('input', wUpdate);
+incNum.addEventListener('click', function (event) {
+  event.preventDefault();
+  refreshNum(numerator + 1);
+});
+decNum.addEventListener('click', function (event) {
+  event.preventDefault();
+  refreshNum(numerator - 1);
+});
+incDen.addEventListener('click', function (event) {
+  event.preventDefault();
+  var target = document.getElementById('dInput');
+  target.value = parseInt(target.value) + 1;
+  refreshDen(target.value);
+});
+decDen.addEventListener('click', function (event) {
+  event.preventDefault();
 
-function wUpdate() {
-  whole = this.value;
-  refreshMain();
-}
+  if (numerator % 2 != 0) {
+    alertOutput.innerHTML = 'Warning! Precision lost.';
+    setTimeout(function () {
+      return alertOutput.innerHTML = '';
+    }, 2000);
+  }
 
-function dUpdate() {
-  denominator = Math.pow(2, this.value);
+  var target = document.getElementById('dInput');
+  target.value = parseInt(target.value) - 1;
+  refreshDen(target.value);
+});
+decWh.addEventListener('click', function (event) {
+  event.preventDefault();
+  refreshWh(whole - 1);
+});
+incWh.addEventListener('click', function (event) {
+  event.preventDefault();
+  refreshWh(whole + 1);
+});
+
+function refreshDen(val) {
+  if (val < 1) val = 1;
+  if (val > 6) val = 6;
+  denominator = Math.pow(2, val);
+  console.log("Updating denominator to ".concat(denominator));
   dOutput.innerHTML = denominator;
   nInput.setAttribute("max", denominator);
 
   if (denominator > oldDenominator) {
-    // numerator *= 2;
-    // nInput.setAttribute("value", numerator);
     refreshNum(numerator * 2);
   } else if (denominator < oldDenominator) {
-    // numerator /= 2;
-    // nInput.setAttribute("value", numerator);
     refreshNum(Math.floor(numerator / 2));
   }
 
@@ -156,22 +193,66 @@ function dUpdate() {
   refreshMain();
 }
 
+function wUpdate() {
+  whole = this.value;
+  refreshMain();
+}
+
+function dUpdate() {
+  refreshDen(this.value);
+}
+
 function nUpdate() {
   refreshNum(this.value);
 }
 
 function refreshNum(val) {
+  if (val < 0) val = 0;
+  console.log("Updating numerator to ".concat(val));
   numerator = val;
   nInput.value = numerator;
   nOutput.innerHTML = numerator;
   refreshMain();
 }
 
+function refreshWh(val) {
+  if (val < 0) {
+    val = 0;
+  }
+
+  console.log("Updating whole to ".concat(val));
+  whole = val;
+  wInput.value = whole;
+  refreshMain();
+}
+
 function refreshMain() {
+  if (numerator == denominator) {
+    numerator = 0;
+    refreshWh(whole + 1);
+    refreshNum(numerator);
+  }
+
   var s = '';
-  if (whole != 0) s += "".concat(whole);
-  if (numerator != 0) s += "-" + simplify("".concat(numerator, "/").concat(denominator)) + '"';
-  mainOutput.innerHTML = s;
+
+  if (whole != 0) {
+    s = "".concat(whole);
+  }
+
+  if (whole != 0 && numerator != 0) {
+    s += "-";
+  }
+
+  if (numerator != 0) {
+    s += simplify("".concat(numerator, "/").concat(denominator));
+  }
+
+  if (whole == 0 && numerator == 0) {
+    s = '0';
+  }
+
+  mainOutput.innerHTML = s + '"';
+  ;
 } // https://www.geeksforgeeks.org/reduce-a-fraction-to-its-simplest-form-by-using-javascript/
 
 
