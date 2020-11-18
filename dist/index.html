@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/index.css" rel="stylesheet">
+  <title>Document</title>
+<script src="/index.js"></script></head>
+<body class="words">
+  <form class="input">
+    <label class="input__whole_label" for="wInput">Whole inches:</label>
+    <input class="input__whole_input" type="number" id="wInput">
+
+    <label class="input__numerator_label" for="nInput">Numerator: <span id="nOutput">0</span></label>
+    <input class="input__numerator_input" type="range" id="nInput" min="0" max="2" value="0">
+    
+    
+    <label class="input__denominator_label" for="dInput">Denominator: <span id="dOutput">2</span>    </label>
+    <input class="input__denominator_input" type="range" min="1" max="6" value="1" id="dInput">
+    
+  </form>
+
+
+  <p id="mainOutput"></p>
+
+</body>
+
+<script src="/toolConvertor.js"></script>
+</html>

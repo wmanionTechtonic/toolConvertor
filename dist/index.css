@@ -1,0 +1,28 @@
+.input {
+  display: grid;
+  grid-template-areas: "whl numl denl" "whi numi deni";
+}
+.input__whole_label {
+  grid-area: whl;
+}
+.input__numerator_label {
+  grid-area: numl;
+}
+.input__denominator_label {
+  grid-area: denl;
+}
+.input__whole_input {
+  grid-area: whi;
+}
+.input__numerator_input {
+  grid-area: numi;
+}
+.input__denominator_input {
+  grid-area: deni;
+}
+
+.words {
+  font-size: 1.5rem;
+}
+
+/*# sourceMappingURL=/index.css.map */

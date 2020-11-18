@@ -3,17 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="index.scss" rel="stylesheet" />
   <title>Document</title>
 </head>
-<body>
-  <form>
-    <input type='number' id='wInput'>
-    <input type='range' id='nInput' min='0' max='2' value='0'>
-    Numerator: <span id='nOutput'>0</span>
-    
+<body class='words'>
+  <form class='input'>
+    <label class="input__whole_label" for='wInput'>Whole inches:</label>
+    <input class='input__whole_input' type='number' id='wInput'>
 
-      <input type="range" min='1' max='6' value='1' id="dInput">
-      Denominator: <span id="dOutput">2</span>    
+    <label class="input__numerator_label" for='nInput'>Numerator: <span id='nOutput'>0</span></label>
+    <input class="input__numerator_input" type='range' id='nInput' min='0' max='2' value='0'>
+    
+    
+    <label class="input__denominator_label" for='dInput'>Denominator: <span id="dOutput">2</span>    </label>
+    <input class="input__denominator_input" type="range" min='1' max='6' value='1' id="dInput">
+    
   </form>
 
 

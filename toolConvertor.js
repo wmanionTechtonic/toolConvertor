@@ -64,7 +64,7 @@ function refreshMain() {
 }
 
 
-
+// https://www.geeksforgeeks.org/reduce-a-fraction-to-its-simplest-form-by-using-javascript/
 function simplify(str) { 
   var result = '', data = str.split('/'),  
   numOne = Number(data[0]),  
