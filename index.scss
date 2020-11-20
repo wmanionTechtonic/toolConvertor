@@ -1,21 +1,51 @@
 $input-size: 1.5rem;
 
-.input {
-  justify-content: stretch;
-  display: grid;
-  justify-items: center;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-areas: 
-    "whl numl denl"
-    "whi numi deni";
+// * {
+//   border: 0; margin: 0; padding: 0;
+// }
 
-  @media screen and (max-width: 768px) {
-    grid-template-columns: 1fr 1fr;
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+
+.input {
+  &--decimal {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &--fractional {
+    display: grid;
+    justify-items: center;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-template-areas: 
-      "whl whl"
-      "whi whi"
-      "numl denl"
-      "numi deni";
+      "whl numl denl"
+      "whi numi deni";
+
+    // @media screen and (max-width: 768px) {
+    //   grid-template-columns: 1fr 1fr;
+    //   grid-template-areas: 
+    //     "whl whl"
+    //     "whi whi"
+    //     "numl denl"
+    //     "numi deni";
+    // }
+  }
+
+  &__resolution {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
   }
 
   &__whole_label {
@@ -60,8 +90,11 @@ $input-size: 1.5rem;
 }
 
 .output {
-  font-size: $input-size * 2;
+  font-size: $input-size;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   &--alert {
     background-color: black;
@@ -82,16 +115,16 @@ $input-size: 1.5rem;
   display: block;
   font-size: $input-size;
   margin: 0.5rem;
-  padding: 0.5rem;
-  width: 10rem;
+  padding: 0.8rem;
+  min-width: 10rem;
   border-radius: 1rem;
-
+  
   &--inc {
-    background-color: lightblue;
+    background-color: palegreen;
   }
 
   &--dec {
-    background-color: pink;
+    background-color: lightblue;
   }
 }
 .input_box {
@@ -100,9 +133,30 @@ $input-size: 1.5rem;
   width: 8rem;
   text-align: center;
   flex-basis: 65%;
+  border-radius: 1rem;
 }
 
 .slider {
   font-size: 3rem;
   height: 3rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  background-color: black;
+  border-radius: 1rem;
+  color: lightblue;
+  padding: 0.5rem;
+  text-justify: center;
+}
+
+.links {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  &__link {
+    text-decoration: none;
+  }
 }

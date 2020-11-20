@@ -159,7 +159,7 @@ decDen.addEventListener('click', function (event) {
     alertOutput.innerHTML = 'Warning! Precision lost.';
     setTimeout(function () {
       return alertOutput.innerHTML = '';
-    }, 2000);
+    }, 5000);
   }
 
   var target = document.getElementById('dInput');
@@ -252,7 +252,31 @@ function refreshMain() {
   }
 
   mainOutput.innerHTML = s + '"';
-  ;
+  closestMetric();
+}
+
+function closestMetric() {
+  var standard = whole + numerator / denominator;
+  var mm = Math.floor(standard * 25.4);
+
+  if (mm < 100) {
+    var diff = (standard - mm / 25.4).toFixed(3);
+    document.getElementById('metric__under').innerHTML = "".concat(mm, "mm + ").concat(diff, "\"");
+    mm = Math.ceil(standard * 25.4);
+    diff = Math.abs((standard - mm / 25.4).toFixed(3));
+    document.getElementById('metric__over').innerHTML = "".concat(mm, "mm - ").concat(Math.abs(diff).toFixed(3), "\"");
+    document.getElementById('metric__exact').innerHTML = "".concat((standard * 25.4).toFixed(2), "mm");
+  } else {
+    var cm = mm / 10;
+
+    var _diff = (standard - cm / 2.54).toFixed(3);
+
+    document.getElementById('metric__under').innerHTML = "".concat(cm.toFixed(1), "cm + ").concat(_diff, "\""); //cm = Math.ceil(standard * 2.54);
+
+    _diff = Math.abs((standard - cm / 2.54).toFixed(3));
+    document.getElementById('metric__over').innerHTML = "".concat(cm, "cm - ").concat(Math.abs(_diff).toFixed(3), "\"");
+    document.getElementById('metric__exact').innerHTML = "".concat((standard * 2.54).toFixed(2), "cm");
+  }
 } // https://www.geeksforgeeks.org/reduce-a-fraction-to-its-simplest-form-by-using-javascript/
 
 

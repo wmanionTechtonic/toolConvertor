@@ -117,34 +117,158 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"package.json":[function(require,module,exports) {
-module.exports = {
-  "name": "toolConvertor",
-  "version": "1.0.0",
-  "description": "A JS Applet for converting between metric and \"standard\" tool sizes.",
-  "main": "toolConvertor.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wmanionTechtonic/toolConvertor.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/wmanionTechtonic/toolConvertor/issues"
-  },
-  "homepage": "https://github.com/wmanionTechtonic/toolConvertor#readme",
-  "devDependencies": {
-    "marked": "^1.2.4",
-    "sass": "^1.29.0"
-  },
-  "dependencies": {
-    "node-sass": "^5.0.0"
+})({"decimalInch.js":[function(require,module,exports) {
+var inches = 0;
+var resolution = 6;
+var exactMetricOutput = document.getElementById('exactMetricOutput');
+var increaseResolution = document.getElementById('increaseResolution');
+var decreaseResolution = document.getElementById('decreaseResolution');
+var resolutionPower = document.getElementById('resolutionSlider');
+var input = document.getElementById('Inches');
+input.addEventListener('input', inchUpdate);
+increaseResolution.addEventListener('click', function (event) {
+  event.preventDefault();
+  var target = document.getElementById('resolution');
+  target.value = parseInt(target.value) + 1;
+  document.getElementById('test').innerHTML = target.value;
+  refreshResolution(parseInt(target.value));
+});
+resolutionPower.addEventListener('input', resolutionUpdate);
+
+function resolutionUpdate() {
+  processResolution(this.value);
+}
+
+function processResolution(val) {
+  var temp = parseInt(val);
+
+  if (temp < 1) {
+    temp = 1;
+  } else if (temp > 6) {
+    temp = 6;
   }
-};
+
+  resolution = temp;
+  document.getElementById('test').innerHTML = "Fraction Resolution: 1/".concat(Math.pow(2, resolution), "\"");
+  updateOutput();
+}
+
+function inchUpdate() {
+  inches = Math.abs(this.value);
+  wOutput.innerHTML = "".concat(roundToThree(inches), "\"");
+  updateOutput();
+}
+
+function exactMetric() {
+  var exact = inches * 25.4;
+  exactMetricOutput.innerHTML = stringifymm(exact);
+}
+
+function upperMetric() {
+  mm = Math.ceil(inches * 25.4);
+  diff = Math.abs((inches - mm / 25.4).toFixed(3));
+  document.getElementById('metric_over').innerHTML = "".concat(stringifymm(mm, 0), " - ").concat(Math.abs(diff).toFixed(3), "\"");
+}
+
+function lowerMetric() {
+  var mm = Math.floor(inches * 25.4);
+  var diff = (inches - mm / 25.4).toFixed(3);
+  document.getElementById('metric_under').innerHTML = "".concat(stringifymm(mm, 0), " + ").concat(diff, "\"");
+}
+
+function updateOutput() {
+  lowerMetric();
+  exactMetric();
+  upperMetric();
+  lowerFraction();
+  upperFraction();
+}
+
+function stringifymm(val) {
+  var digits = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+
+  if (val > 1000) {
+    return "".concat((val / 1000).toFixed(2), "m");
+  } else if (val > 100) {
+    return "".concat((val / 10).toFixed(1), "cm");
+  } else {
+    return "".concat(val.toFixed(digits), "mm");
+  }
+}
+
+function roundToThree(num) {
+  return +(Math.round(num + "e+3") + "e-3");
+} // Adapted from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/round
+
+
+function candidateArray() {
+  var arr = [0];
+
+  for (var i = 0; i < Math.pow(2, resolution); i++) {
+    arr.push(arr[i] + Math.pow(2, -1 * resolution));
+  }
+
+  return arr;
+}
+
+function lowerFraction() {
+  var arr = candidateArray();
+  var diff = inches % 1.0;
+  var smaller = 0;
+  var position = 0;
+
+  for (var j = 0; j < arr.length; j++) {
+    if (diff >= arr[j]) {
+      smaller = arr[j];
+      position = j;
+    }
+  }
+
+  var fraction = simplify("".concat(position, " / ").concat(Math.pow(2, resolution)));
+  var decFraction = position / Math.pow(2, resolution);
+  document.getElementById('smallerFraction').innerHTML = "Smaller: ".concat(fraction, "\" + ").concat((diff - decFraction).toFixed(3), "\"");
+}
+
+function upperFraction() {
+  var arr = candidateArray();
+  var diff = inches % 1.0;
+  var larger = arr[arr.length - 1];
+  var position = arr.length;
+
+  for (var j = arr.length; j >= 0; j--) {
+    if (diff <= arr[j]) {
+      larger = arr[j];
+      position = j;
+    }
+  }
+
+  var fraction = simplify("".concat(position, " / ").concat(Math.pow(2, resolution)));
+  var decFraction = position / Math.pow(2, resolution);
+  document.getElementById('largerFraction').innerHTML = "Larger: ".concat(fraction, "\" - ").concat((decFraction - diff).toFixed(3), "\"");
+} // https://www.geeksforgeeks.org/reduce-a-fraction-to-its-simplest-form-by-using-javascript/
+
+
+function simplify(str) {
+  var result = '',
+      data = str.split('/'),
+      numOne = Number(data[0]),
+      numTwo = Number(data[1]);
+
+  for (var i = Math.max(numOne, numTwo); i > 1; i--) {
+    if (numOne % i == 0 && numTwo % i == 0) {
+      numOne /= i;
+      numTwo /= i;
+    }
+  }
+
+  if (numTwo === 1) {
+    result = numOne.toString();
+  } else {
+    result = numOne.toString() + '/' + numTwo.toString();
+  }
+
+  return result;
+}
 },{}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -349,5 +473,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","package.json"], null)
-//# sourceMappingURL=/package.js.map
+},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","decimalInch.js"], null)
+//# sourceMappingURL=/decimalInch.js.map

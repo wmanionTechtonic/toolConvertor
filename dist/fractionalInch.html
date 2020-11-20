@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="/index.css" rel="stylesheet">
   <title>Fractional Inch Convertor</title>
-<script src="/index.js"></script></head>
+</head>
 <body class="words">
   <header>
     <h1 class="title">Fractional Inch Convertor</h1>
   </header>
-  <form class="input">
+  <form class="input input--fractional">
     <label class="input__whole_label" for="wInput">Whole inches:</label>
     <div class="input__whole_input">
       <input class="input_box" type="number" id="wInput" value="0">
@@ -36,12 +36,16 @@
   <div class="output output--alert" id="alerts"></div>
   <div class="output">
     <div class="output" id="mainOutput">0"</div>
-    <div class="output" id="metric__under"></div>
-    <div class="output" id="metric__exact"></div>
-    <div class="output" id="metric__over"></div>
+    <div class="output" id="metric__under">0mm + 0.000"</div>
+    <div class="output" id="metric__exact">0.00mm</div>
+    <div class="output" id="metric__over">0mm - 0.000"</div>
+  </div>
+
+  <div class="links">
+    <a class="links__link" href="/decimalInch.html"><button class="button">Decimal Inch Convertor</button></a>
   </div>
 
 </body>
 
-<script src="/fractionalInch.a594e19f.js"></script>
+<script src="/fractionalInch.js"></script>
 </html>

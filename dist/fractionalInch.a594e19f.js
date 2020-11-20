@@ -117,34 +117,190 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"package.json":[function(require,module,exports) {
-module.exports = {
-  "name": "toolConvertor",
-  "version": "1.0.0",
-  "description": "A JS Applet for converting between metric and \"standard\" tool sizes.",
-  "main": "toolConvertor.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wmanionTechtonic/toolConvertor.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/wmanionTechtonic/toolConvertor/issues"
-  },
-  "homepage": "https://github.com/wmanionTechtonic/toolConvertor#readme",
-  "devDependencies": {
-    "marked": "^1.2.4",
-    "sass": "^1.29.0"
-  },
-  "dependencies": {
-    "node-sass": "^5.0.0"
+})({"fractionalInch.js":[function(require,module,exports) {
+var numerator = 0;
+var denominator = 2;
+var whole = 0;
+var oldDenominator = 2;
+var nInput = document.getElementById('nInput');
+var dInput = document.getElementById('dInput');
+var wInput = document.getElementById('wInput');
+var incNum = document.getElementById('incNum');
+var decNum = document.getElementById('decNum');
+var incDen = document.getElementById('incDen');
+var decDen = document.getElementById('decDen');
+var incWh = document.getElementById('incWh');
+var decWh = document.getElementById('decWh');
+var nOutput = document.getElementById('nOutput');
+var dOutput = document.getElementById('dOutput');
+var mainOutput = document.getElementById('mainOutput');
+var alertOutput = document.getElementById('alerts');
+nInput.addEventListener('input', nUpdate);
+dInput.addEventListener('input', dUpdate);
+wInput.addEventListener('input', wUpdate);
+incNum.addEventListener('click', function (event) {
+  event.preventDefault();
+  refreshNum(numerator + 1);
+});
+decNum.addEventListener('click', function (event) {
+  event.preventDefault();
+  refreshNum(numerator - 1);
+});
+incDen.addEventListener('click', function (event) {
+  event.preventDefault();
+  var target = document.getElementById('dInput');
+  target.value = parseInt(target.value) + 1;
+  refreshDen(target.value);
+});
+decDen.addEventListener('click', function (event) {
+  event.preventDefault();
+
+  if (numerator % 2 != 0) {
+    alertOutput.innerHTML = 'Warning! Precision lost.';
+    setTimeout(function () {
+      return alertOutput.innerHTML = '';
+    }, 5000);
   }
-};
+
+  var target = document.getElementById('dInput');
+  target.value = parseInt(target.value) - 1;
+  refreshDen(target.value);
+});
+decWh.addEventListener('click', function (event) {
+  event.preventDefault();
+  refreshWh(whole - 1);
+});
+incWh.addEventListener('click', function (event) {
+  event.preventDefault();
+  refreshWh(whole + 1);
+});
+
+function refreshDen(val) {
+  if (val < 1) val = 1;
+  if (val > 6) val = 6;
+  denominator = Math.pow(2, val);
+  console.log("Updating denominator to ".concat(denominator));
+  dOutput.innerHTML = denominator;
+  nInput.setAttribute("max", denominator);
+
+  if (denominator > oldDenominator) {
+    refreshNum(numerator * 2);
+  } else if (denominator < oldDenominator) {
+    refreshNum(Math.floor(numerator / 2));
+  }
+
+  oldDenominator = denominator;
+  refreshMain();
+}
+
+function wUpdate() {
+  whole = this.value;
+  refreshMain();
+}
+
+function dUpdate() {
+  refreshDen(this.value);
+}
+
+function nUpdate() {
+  refreshNum(this.value);
+}
+
+function refreshNum(val) {
+  if (val < 0) val = 0;
+  console.log("Updating numerator to ".concat(val));
+  numerator = val;
+  nInput.value = numerator;
+  nOutput.innerHTML = numerator;
+  refreshMain();
+}
+
+function refreshWh(val) {
+  if (val < 0) {
+    val = 0;
+  }
+
+  console.log("Updating whole to ".concat(val));
+  whole = val;
+  wInput.value = whole;
+  refreshMain();
+}
+
+function refreshMain() {
+  if (numerator == denominator) {
+    numerator = 0;
+    refreshWh(whole + 1);
+    refreshNum(numerator);
+  }
+
+  var s = '';
+
+  if (whole != 0) {
+    s = "".concat(whole);
+  }
+
+  if (whole != 0 && numerator != 0) {
+    s += "-";
+  }
+
+  if (numerator != 0) {
+    s += simplify("".concat(numerator, "/").concat(denominator));
+  }
+
+  if (whole == 0 && numerator == 0) {
+    s = '0';
+  }
+
+  mainOutput.innerHTML = s + '"';
+  closestMetric();
+}
+
+function closestMetric() {
+  var standard = whole + numerator / denominator;
+  var mm = Math.floor(standard * 25.4);
+
+  if (mm < 100) {
+    var diff = (standard - mm / 25.4).toFixed(3);
+    document.getElementById('metric__under').innerHTML = "".concat(mm, "mm + ").concat(diff, "\"");
+    mm = Math.ceil(standard * 25.4);
+    diff = Math.abs((standard - mm / 25.4).toFixed(3));
+    document.getElementById('metric__over').innerHTML = "".concat(mm, "mm - ").concat(Math.abs(diff).toFixed(3), "\"");
+    document.getElementById('metric__exact').innerHTML = "".concat((standard * 25.4).toFixed(2), "mm");
+  } else {
+    var cm = mm / 10;
+
+    var _diff = (standard - cm / 2.54).toFixed(3);
+
+    document.getElementById('metric__under').innerHTML = "".concat(cm.toFixed(1), "cm + ").concat(_diff, "\""); //cm = Math.ceil(standard * 2.54);
+
+    _diff = Math.abs((standard - cm / 2.54).toFixed(3));
+    document.getElementById('metric__over').innerHTML = "".concat(cm, "cm - ").concat(Math.abs(_diff).toFixed(3), "\"");
+    document.getElementById('metric__exact').innerHTML = "".concat((standard * 2.54).toFixed(2), "cm");
+  }
+} // https://www.geeksforgeeks.org/reduce-a-fraction-to-its-simplest-form-by-using-javascript/
+
+
+function simplify(str) {
+  var result = '',
+      data = str.split('/'),
+      numOne = Number(data[0]),
+      numTwo = Number(data[1]);
+
+  for (var i = Math.max(numOne, numTwo); i > 1; i--) {
+    if (numOne % i == 0 && numTwo % i == 0) {
+      numOne /= i;
+      numTwo /= i;
+    }
+  }
+
+  if (numTwo === 1) {
+    result = numOne.toString();
+  } else {
+    result = numOne.toString() + '/' + numTwo.toString();
+  }
+
+  return result;
+}
 },{}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -173,7 +329,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54719" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56104" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -349,5 +505,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","package.json"], null)
-//# sourceMappingURL=/package.js.map
+},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","fractionalInch.js"], null)
+//# sourceMappingURL=/fractionalInch.a594e19f.js.map
