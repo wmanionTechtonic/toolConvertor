@@ -8,20 +8,26 @@ let decreaseResolution = document.getElementById('decreaseResolution');
 let resolutionPower = document.getElementById('resolutionSlider');
 
 let input = document.getElementById('Inches');
-
 input.addEventListener('input', inchUpdate);
 
 increaseResolution.addEventListener('click', (event) => {
   event.preventDefault();
-  let target = document.getElementById('resolution');
+  let target = document.getElementById('resolutionSlider');
   target.value = parseInt(target.value) + 1;
-  document.getElementById('test').innerHTML = target.value;
-  refreshResolution(parseInt(target.value));
+  processResolution(target.value);
+});
+
+decreaseResolution.addEventListener('click', (event) => {
+  event.preventDefault();
+  let target = document.getElementById('resolutionSlider');
+  target.value = parseInt(target.value) - 1;
+  processResolution(target.value);
 });
 
 resolutionPower.addEventListener('input', resolutionUpdate);
 
 function resolutionUpdate() {
+  console.log(`resolutionUpdate(): ${this.value}`);
   processResolution(this.value);
 }
 
@@ -32,6 +38,7 @@ function processResolution(val) {
   } else if (temp > 6) {
     temp = 6;
   }
+  console.log('temp: ' + temp);
   resolution = temp;
   document.getElementById('test').innerHTML = `Fraction Resolution: 1/${Math.pow(2, resolution)}"`;
   updateOutput();
@@ -78,10 +85,6 @@ function stringifymm(val, digits = 2) {
   }
 }
 
-function roundToThree(num) {    
-  return +(Math.round(num + "e+3")  + "e-3");
-} // Adapted from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/round
-
 function candidateArray() {
   let arr = [0];
   for (let i = 0; i < Math.pow(2, resolution) ; i++) {
@@ -106,8 +109,11 @@ function lowerFraction() {
   let fraction = simplify(`${position} / ${Math.pow(2, resolution)}`);
   let decFraction = position / Math.pow(2, resolution);
 
-  document.getElementById('smallerFraction').innerHTML = 
-    `Smaller: ${fraction}" + ${(diff - decFraction).toFixed(3)}"`;
+  let string = 'Smaller: ';
+  string += (inches > 1.0) ? `${(Math.trunc(inches).toString() )}-` : '';
+  string += `${fraction}" + ${(diff - decFraction).toFixed(3)}"`;
+
+  document.getElementById('smallerFraction').innerHTML = string;
 }
 
 function upperFraction() {
@@ -126,18 +132,13 @@ function upperFraction() {
   let decFraction = position / Math.pow(2, resolution);
   document.getElementById('largerFraction').innerHTML =  
     `Larger: ${fraction}" - ${(decFraction - diff).toFixed(3)}"`;
+
+  let string = 'Larger: ';
+  string += (inches > 1.0) ? `${(Math.trunc(inches).toString() )}-` : '';
+  string += `${fraction}" - ${(decFraction - diff).toFixed(3)}"`;
+
+  document.getElementById('largerFraction').innerHTML = string;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // https://www.geeksforgeeks.org/reduce-a-fraction-to-its-simplest-form-by-using-javascript/
 function simplify(str) { 
@@ -157,3 +158,7 @@ function simplify(str) {
   } 
   return result 
 }
+
+function roundToThree(num) {    
+  return +(Math.round(num + "e+3")  + "e-3");
+} // Adapted from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/round

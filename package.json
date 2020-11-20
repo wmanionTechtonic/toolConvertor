@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "marked": "^1.2.5",
+    "sass": "^1.29.0"
+  }
+}
