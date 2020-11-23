@@ -5,7 +5,7 @@
   "main": "decimalInch.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "parcel build *.html",
+    "post": "parcel build *.html",
     "dev": "sass index.scss index.css; parcel fractionalInch.html"
   },
   "repository": {
