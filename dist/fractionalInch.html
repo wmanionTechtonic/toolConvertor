@@ -1,1 +1,51 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link href="/toolConvertor.6a4010a4.css" rel="stylesheet"><title>Fractional Inch Convertor</title></head><body class="words"> <header> <h1 class="title">Fractional Inch Convertor</h1> </header> <form class="input input--fractional"> <label class="input__whole_label" for="wInput">Whole inches:</label> <div class="input__whole_input"> <input class="input_box" type="number" id="wInput" value="0"> <button class="button button--inc" id="incWh">Increment Inches</button> <button class="button button--dec" id="decWh">Decrement Inches</button> </div> <label class="input__numerator_label" for="nInput">Numerator: <span id="nOutput">0</span></label> <div class="input__numerator_input"> <input class="slider" type="range" id="nInput" min="0" max="2" value="0"> <button class="button button--inc" id="incNum">Increment Numerator</button> <button class="button button--dec" id="decNum">Decrement Numerator</button> </div> <label class="input__denominator_label" for="dInput">Denominator: <span id="dOutput">2</span></label> <div class="input__denominator_input"> <input class="slider" type="range" min="1" max="6" value="1" id="dInput"> <button class="button button--inc" id="incDen">Increment Denominator</button> <button class="button button--dec" id="decDen">Decrement Denominator</button> </div> </form> <div class="output output--alert" id="alerts"></div> <div class="output"> <div class="output" id="mainOutput">0"</div> <div class="output" id="metric__under">0mm + 0.000"</div> <div class="output" id="metric__exact">0.00mm</div> <div class="output" id="metric__over">0mm - 0.000"</div> </div> <div class="links"> <a class="links__link" href="/decimalInch.html"><button class="button">Decimal Inch Convertor</button></a> </div> </body><script src="/fractionalInch.b049ff2c.js"></script></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/toolConvertor.9ad09f98.css" rel="stylesheet">
+  <title>Fractional Inch Convertor</title>
+</head>
+<body class="words">
+  <header>
+    <h1 class="title">Fractional Inch Convertor</h1>
+  </header>
+  <form class="input input--fractional">
+    <label class="input__whole_label" for="wInput">Whole inches:</label>
+    <div class="input__whole_input">
+      <input class="input_box" type="number" id="wInput" value="0">
+      <button class="button button--inc" id="incWh">Increment Inches</button>
+      <button class="button button--dec" id="decWh">Decrement Inches</button>
+    </div>
+
+    <label class="input__numerator_label" for="nInput">Numerator: <span id="nOutput">0</span></label>
+    <div class="input__numerator_input">
+      <input class="slider" type="range" id="nInput" min="0" max="2" value="0">
+      <button class="button button--inc" id="incNum">Increment Numerator</button>
+      <button class="button button--dec" id="decNum">Decrement Numerator</button>
+    </div>
+    
+    <label class="input__denominator_label" for="dInput">Denominator: <span id="dOutput">2</span></label>
+    <div class="input__denominator_input">
+      <input class="slider" type="range" min="1" max="6" value="1" id="dInput">
+      <button class="button button--inc" id="incDen">Increment Denominator</button>
+      <button class="button button--dec" id="decDen">Decrement Denominator</button>
+    </div>
+  </form>
+
+  <div class="output output--alert" id="alerts"></div>
+  <div class="output">
+    <div class="output" id="mainOutput">0"</div>
+    <div class="output" id="metric__under">0mm + 0.000"</div>
+    <div class="output" id="metric__exact">0.00mm</div>
+    <div class="output" id="metric__over">0mm - 0.000"</div>
+  </div>
+
+  <div class="links">
+    <a class="links__link" href="/decimalInch.html"><button class="button">Decimal Inch Convertor</button></a>
+  </div>
+
+</body>
+
+<script src="/fractionalInch.a594e19f.js"></script>
+</html>

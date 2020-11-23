@@ -117,185 +117,79 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"fractionalInch.js":[function(require,module,exports) {
-var numerator = 0;
-var denominator = 2;
-var whole = 0;
-var oldDenominator = 2;
-var nInput = document.getElementById('nInput');
-var dInput = document.getElementById('dInput');
-var wInput = document.getElementById('wInput');
-var incNum = document.getElementById('incNum');
-var decNum = document.getElementById('decNum');
-var incDen = document.getElementById('incDen');
-var decDen = document.getElementById('decDen');
-var incWh = document.getElementById('incWh');
-var decWh = document.getElementById('decWh');
-var nOutput = document.getElementById('nOutput');
-var dOutput = document.getElementById('dOutput');
-var mainOutput = document.getElementById('mainOutput');
-var alertOutput = document.getElementById('alerts');
-nInput.addEventListener('input', nUpdate);
-dInput.addEventListener('input', dUpdate);
-wInput.addEventListener('input', wUpdate);
-incNum.addEventListener('click', function (event) {
-  event.preventDefault();
-  refreshNum(numerator + 1);
-});
-decNum.addEventListener('click', function (event) {
-  event.preventDefault();
-  refreshNum(numerator - 1);
-});
-incDen.addEventListener('click', function (event) {
-  event.preventDefault();
-  var target = document.getElementById('dInput');
-  target.value = parseInt(target.value) + 1;
-  refreshDen(target.value);
-});
-decDen.addEventListener('click', function (event) {
-  event.preventDefault();
+})({"node_modules/parcel/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
 
-  if (numerator % 2 != 0) {
-    alertOutput.innerHTML = 'Warning! Precision lost.';
-    setTimeout(function () {
-      return alertOutput.innerHTML = '';
-    }, 5000);
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
   }
 
-  var target = document.getElementById('dInput');
-  target.value = parseInt(target.value) - 1;
-  refreshDen(target.value);
-});
-decWh.addEventListener('click', function (event) {
-  event.preventDefault();
-  refreshWh(whole - 1);
-});
-incWh.addEventListener('click', function (event) {
-  event.preventDefault();
-  refreshWh(whole + 1);
-});
-
-function refreshDen(val) {
-  if (val < 1) val = 1;
-  if (val > 6) val = 6;
-  denominator = Math.pow(2, val);
-  dOutput.innerHTML = denominator;
-  nInput.setAttribute("max", denominator);
-
-  if (denominator > oldDenominator) {
-    refreshNum(numerator * 2);
-  } else if (denominator < oldDenominator) {
-    refreshNum(Math.floor(numerator / 2));
-  }
-
-  oldDenominator = denominator;
-  refreshMain();
+  return bundleURL;
 }
 
-function wUpdate() {
-  this.value = parseInt(this.value);
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
 
-  if (this.value < 0) {
-    this.value = Math.abs(this.value);
-    wInput.value = this.value;
-  }
-
-  if (this.value != Math.floor(this.value)) {
-    this.value = Math.floor(this.value);
-    wInput.value = this.value;
-  }
-
-  whole = parseInt(this.value);
-  refreshMain();
-}
-
-function dUpdate() {
-  refreshDen(this.value);
-}
-
-function nUpdate() {
-  refreshNum(this.value);
-}
-
-function refreshNum(val) {
-  if (val < 0) val = 0;
-  numerator = val;
-  nInput.value = numerator;
-  nOutput.innerHTML = numerator;
-  refreshMain();
-}
-
-function refreshWh(val) {
-  if (val < 0) {
-    val = 0;
-  }
-
-  whole = val;
-  wInput.value = whole;
-  refreshMain();
-}
-
-function refreshMain() {
-  if (numerator == denominator) {
-    numerator = 0;
-    refreshWh(whole + 1);
-    refreshNum(numerator);
-  }
-
-  var s = whole != 0 ? "".concat(whole) : '';
-  s += whole != 0 && numerator != 0 ? '-' : '';
-  s += numerator != 0 ? simplify("".concat(numerator, "/").concat(denominator)) : '';
-  s = whole == 0 && numerator == 0 ? '0' : s;
-  mainOutput.innerHTML = "".concat(s, "\" (").concat((whole + numerator / denominator).toFixed(3), "\")");
-  closestMetric();
-}
-
-function closestMetric() {
-  var standard = whole + numerator / denominator;
-  var mm = Math.floor(standard * 25.4);
-  var diff = (standard - mm / 25.4).toFixed(3);
-  document.getElementById('metric__under').innerHTML = "".concat(stringifymm(mm, 0), " + ").concat(diff, "\"");
-  mm = Math.ceil(standard * 25.4);
-  diff = Math.abs((standard - mm / 25.4).toFixed(3));
-  document.getElementById('metric__over').innerHTML = "".concat(stringifymm(mm, 0), " - ").concat(Math.abs(diff).toFixed(3), "\"");
-  document.getElementById('metric__exact').innerHTML = "".concat((standard * 25.4).toFixed(2), "mm");
-}
-
-function stringifymm(val) {
-  var digits = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 3;
-
-  if (val > 1000) {
-    return "".concat((val / 1000).toFixed(2), "m");
-  } else if (val > 100) {
-    return "".concat((val / 10).toFixed(1), "cm");
-  } else {
-    return "".concat(val.toFixed(digits), "mm");
-  }
-} // https://www.geeksforgeeks.org/reduce-a-fraction-to-its-simplest-form-by-using-javascript/
-
-
-function simplify(str) {
-  var result = '',
-      data = str.split('/'),
-      numOne = Number(data[0]),
-      numTwo = Number(data[1]);
-
-  for (var i = Math.max(numOne, numTwo); i > 1; i--) {
-    if (numOne % i == 0 && numTwo % i == 0) {
-      numOne /= i;
-      numTwo /= i;
+    if (matches) {
+      return getBaseURL(matches[0]);
     }
   }
 
-  if (numTwo === 1) {
-    result = numOne.toString();
-  } else {
-    result = numOne.toString() + '/' + numTwo.toString();
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"node_modules/parcel/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
+  };
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
   }
 
-  return result;
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+
+    cssTimeout = null;
+  }, 50);
 }
-},{}],"node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+module.exports = reloadCSS;
+},{"./bundle-url":"node_modules/parcel/src/builtins/bundle-url.js"}],"index.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"node_modules/parcel/src/builtins/css-loader.js"}],"node_modules/parcel/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -499,5 +393,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["node_modules/parcel/src/builtins/hmr-runtime.js","fractionalInch.js"], null)
-//# sourceMappingURL=/fractionalInch.a594e19f.js.map
+},{}]},{},["node_modules/parcel/src/builtins/hmr-runtime.js"], null)
+//# sourceMappingURL=/toolConvertor.9ad09f98.js.map
