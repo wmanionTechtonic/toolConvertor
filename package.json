@@ -21,5 +21,8 @@
   "homepage": "https://github.com/wmanionTechtonic/toolConvertor#readme",
   "dependencies": {
     "parcel": "^1.12.4"
+  },
+  "devDependencies": {
+    "sass": "^1.29.0"
   }
 }
